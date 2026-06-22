@@ -1,9 +1,11 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useApp } from '../context/AppContext';
 
 export default function NavBar() {
   const { user, logout } = useAuth();
+  const { unreadNudgeCount } = useApp();
   const navigate = useNavigate();
 
   if (!user) return null;
@@ -42,6 +44,12 @@ export default function NavBar() {
         </NavLink>
       </div>
       <div className="navbar-right">
+        <NavLink to="/notifications" className="navbar-bell-link">
+          <span className="navbar-bell">🔔</span>
+          {unreadNudgeCount > 0 && (
+            <span className="navbar-bell-badge">{unreadNudgeCount > 9 ? '9+' : unreadNudgeCount}</span>
+          )}
+        </NavLink>
         <button className="btn btn-ghost btn-sm" onClick={handleLogout}>
           Log out
         </button>

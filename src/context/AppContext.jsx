@@ -10,6 +10,8 @@ export function AppProvider({ children }) {
   const [memories, setMemories] = useState([]);
   const [tokenLedger, setTokenLedger] = useState({ tokensIn: 0, tokensOut: 0, turnCount: 0, tokensSavedEstimate: 0 });
   const [greeting, setGreeting] = useState('');
+  const [nudges, setNudges] = useState([]);
+  const [unreadNudgeCount, setUnreadNudgeCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const fetchGoals = useCallback(async (memberId) => {
@@ -137,6 +139,56 @@ export function AppProvider({ children }) {
     setTokenLedger({ tokensIn: 0, tokensOut: 0, turnCount: 0, tokensSavedEstimate: 0 });
   }, [API, getAuthHeader]);
 
+  const fetchNudges = useCallback(async () => {
+    try {
+      const res = await API.get('/nudges', { params: { includeRead: true }, headers: getAuthHeader() });
+      setNudges(res.data);
+    } catch (err) {
+      console.error('Failed to fetch nudges:', err);
+    }
+  }, [API, getAuthHeader]);
+
+  const fetchUnreadNudgeCount = useCallback(async () => {
+    try {
+      const res = await API.get('/nudges/unread-count', { headers: getAuthHeader() });
+      setUnreadNudgeCount(res.data.count);
+    } catch (err) {
+      console.error('Failed to fetch nudge count:', err);
+    }
+  }, [API, getAuthHeader]);
+
+  const markNudgeRead = useCallback(async (nudgeId) => {
+    try {
+      await API.put(`/nudges/${nudgeId}/read`, {}, { headers: getAuthHeader() });
+      setNudges((prev) => prev.map((n) => 
+        (n._id === nudgeId || n.id === nudgeId) ? { ...n, read: true } : n
+      ));
+      setUnreadNudgeCount((prev) => Math.max(0, prev - 1));
+    } catch (err) {
+      console.error('Failed to mark nudge read:', err);
+    }
+  }, [API, getAuthHeader]);
+
+  const markAllNudgesRead = useCallback(async () => {
+    try {
+      await API.put('/nudges/read-all', {}, { headers: getAuthHeader() });
+      setNudges((prev) => prev.map((n) => ({ ...n, read: true })));
+      setUnreadNudgeCount(0);
+    } catch (err) {
+      console.error('Failed to mark all nudges read:', err);
+    }
+  }, [API, getAuthHeader]);
+
+  const dismissNudge = useCallback(async (nudgeId) => {
+    try {
+      await API.put(`/nudges/${nudgeId}/dismiss`, {}, { headers: getAuthHeader() });
+      setNudges((prev) => prev.filter((n) => n._id !== nudgeId && n.id !== nudgeId));
+      setUnreadNudgeCount((prev) => Math.max(0, prev - 1));
+    } catch (err) {
+      console.error('Failed to dismiss nudge:', err);
+    }
+  }, [API, getAuthHeader]);
+
   const refreshAll = useCallback(async (memberId) => {
     if (!memberId) return;
     setLoading(true);
@@ -152,8 +204,18 @@ export function AppProvider({ children }) {
   useEffect(() => {
     if (activeMemberId) {
       refreshAll(activeMemberId);
+      fetchUnreadNudgeCount();
     }
-  }, [activeMemberId, refreshAll]);
+  }, [activeMemberId, refreshAll, fetchUnreadNudgeCount]);
+
+  // Poll for unread nudge count every 60s
+  useEffect(() => {
+    if (!activeMemberId) return;
+    const interval = setInterval(() => {
+      fetchUnreadNudgeCount();
+    }, 60000);
+    return () => clearInterval(interval);
+  }, [activeMemberId, fetchUnreadNudgeCount]);
 
   const value = {
     goals,
@@ -161,6 +223,8 @@ export function AppProvider({ children }) {
     memories,
     tokenLedger,
     greeting,
+    nudges,
+    unreadNudgeCount,
     loading,
     fetchGoals,
     fetchMoodHistory,
@@ -180,6 +244,11 @@ export function AppProvider({ children }) {
     clearMemories,
     resetTokenLedger,
     refreshAll,
+    fetchNudges,
+    fetchUnreadNudgeCount,
+    markNudgeRead,
+    markAllNudgesRead,
+    dismissNudge,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

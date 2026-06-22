@@ -15,6 +15,7 @@ import GoalDetailPage from './pages/GoalDetailPage';
 import NewGoalPage from './pages/NewGoalPage';
 import FamilyPage from './pages/FamilyPage';
 import SettingsPage from './pages/SettingsPage';
+import NotificationsPage from './pages/NotificationsPage';
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -42,6 +43,7 @@ function AppContent() {
           <Route path="/goals/:id" element={<ProtectedRoute><AppLayout><GoalDetailPage /></AppLayout></ProtectedRoute>} />
           <Route path="/family" element={<ProtectedRoute><AppLayout><FamilyPage /></AppLayout></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><AppLayout><SettingsPage /></AppLayout></ProtectedRoute>} />
+          <Route path="/notifications" element={<ProtectedRoute><AppLayout><NotificationsPage /></AppLayout></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </SocketProvider>
