@@ -3,10 +3,11 @@ import { useCoach } from '../hooks/useCoach';
 import ChatBubble from '../components/ChatBubble';
 import TypingIndicator from '../components/TypingIndicator';
 import DraftGoalCard from '../components/DraftGoalCard';
+import CalendarSuggestionCard from '../components/CalendarSuggestionCard';
 import { useAuth } from '../context/AuthContext';
 
 export default function CoachPage() {
-  const { messages, isTyping, pendingDraft, connected, sendMessage, loadHistory, clearChat, dismissDraft } = useCoach();
+  const { messages, isTyping, pendingDraft, pendingCalendarSuggestion, connected, sendMessage, loadHistory, clearChat, dismissDraft, confirmCalendarEvent, declineCalendarEvent } = useCoach();
   const { activeMemberId } = useAuth();
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
@@ -77,6 +78,15 @@ export default function CoachPage() {
                   // Goal planted successfully
                 }}
                 onDismiss={() => dismissDraft()}
+              />
+            )}
+
+            {/* Show calendar suggestion card */}
+            {pendingCalendarSuggestion && (
+              <CalendarSuggestionCard
+                suggestion={pendingCalendarSuggestion}
+                onConfirm={() => confirmCalendarEvent(pendingCalendarSuggestion.id)}
+                onDismiss={() => declineCalendarEvent(pendingCalendarSuggestion.id)}
               />
             )}
 
