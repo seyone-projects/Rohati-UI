@@ -13,6 +13,7 @@ export function SocketProvider({ children }) {
   const [chatMessages, setChatMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [pendingDraft, setPendingDraft] = useState(null);
+  const [pendingCalendarSuggestion, setPendingCalendarSuggestion] = useState(null);
   const [currentTurnId, setCurrentTurnId] = useState(null);
   const [crisisAlert, setCrisisAlert] = useState(false);
 
@@ -63,6 +64,14 @@ export function SocketProvider({ children }) {
       setPendingDraft(data);
     });
 
+    socket.on('coach_calendar_suggestion', (data) => {
+      setPendingCalendarSuggestion(data);
+    });
+
+    socket.on('coach_calendar_note', (data) => {
+      // Lightweight notification — conflict noted, will retry on next turn
+    });
+
     socket.on('coach_typing', (data) => {
       setIsTyping(data.isTyping);
     });
@@ -99,6 +108,7 @@ export function SocketProvider({ children }) {
       { role: 'user', content: content.trim(), id: Date.now().toString(), timestamp: new Date().toISOString() },
     ]);
     setPendingDraft(null);
+    setPendingCalendarSuggestion(null);
     socketRef.current.emit('user_message', { content: content.trim(), memberId });
   }, []);
 
@@ -120,6 +130,10 @@ export function SocketProvider({ children }) {
     setCrisisAlert(false);
   }, []);
 
+  const dismissCalendarSuggestion = useCallback(() => {
+    setPendingCalendarSuggestion(null);
+  }, []);
+
   const value = {
     socketRef,
     connected,
@@ -127,6 +141,8 @@ export function SocketProvider({ children }) {
     setChatMessages,
     isTyping,
     pendingDraft,
+    pendingCalendarSuggestion,
+    setPendingCalendarSuggestion,
     currentTurnId,
     crisisAlert,
     sendMessage,
@@ -134,6 +150,7 @@ export function SocketProvider({ children }) {
     clearHistory,
     dismissDraft,
     dismissCrisis,
+    dismissCalendarSuggestion,
   };
 
   return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
