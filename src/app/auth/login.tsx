@@ -1,20 +1,36 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { Link } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
+import * as authService from '../../services/authService';
 
 export default function LoginScreen() {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = () => {
-    // In a real app, send credentials to the backend
-    // For now, we simulate a successful login
-    if (email && password) {
-      login('fake-jwt-token', { id: '1', username: 'TestUser', email });
-    } else {
+  const handleLogin = async () => {
+    if (!email || !password) {
       alert("Please enter email and password");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      // The API client automatically encrypts this payload before sending it!
+      const response = await authService.login({ email, password });
+      
+      console.log('Login Success:', response);
+      // login(response.token, response.user);
+      
+      // For now, if no backend is running:
+      login('fake-jwt-token', { id: '1', username: 'TestUser', email });
+    } catch (error) {
+      console.error('Login failed:', error);
+      alert('Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
