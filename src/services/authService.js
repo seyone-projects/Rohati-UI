@@ -1,11 +1,4 @@
-import { createAuthClient } from '@better-auth/client/expo';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// Initialize the Better Auth Expo Client
-export const authClient = createAuthClient({
-    baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://localhost:7000',
-    storage: AsyncStorage, // Automatically stores and hydrates session tokens
-});
+import apiClient from "./apiService";
 
 /**
  * Login user using Better Auth Email and Password
@@ -13,12 +6,8 @@ export const authClient = createAuthClient({
  * @returns {Promise}
  */
 export const login = async (credentials) => {
-    const { email, password } = credentials;
-    const response = await authClient.signIn.email({
-        email,
-        password,
-    });
-    return response.data;
+  const response = await apiClient.post("/auth/login", credentials);
+  return response.data;
 };
 
 /**
@@ -41,8 +30,18 @@ export const signUp = async (data) => {
  * @returns {Promise}
  */
 export const logout = async () => {
-    const response = await authClient.signOut();
-    return response;
+  const response = await apiClient.post("/auth/logout");
+  return response.data;
+};
+
+/**
+ * Register a new primary parent account
+ * @param {Object} userData - { email, password, familyName }
+ * @returns {Promise}
+ */
+export const register = async (userData) => {
+  const response = await apiClient.post("/auth/register", userData);
+  return response.data;
 };
 
 /**
@@ -50,16 +49,15 @@ export const logout = async () => {
  * @returns {Promise}
  */
 export const getCurrentUser = async () => {
-    const session = await authClient.getSession();
-    return session.data?.user || null;
+  const response = await apiClient.get("/auth/me");
+  return response.data;
 };
 
 /**
  * Refresh access token
  * @returns {Promise}
  */
-export const refreshToken = async () => {
-    // Better Auth handles token refreshing internally on the client
-    const session = await authClient.getSession();
-    return session.data;
+export const refreshToken = async (refreshToken) => {
+  const response = await apiClient.post("/auth/refresh", { refreshToken });
+  return response.data;
 };
