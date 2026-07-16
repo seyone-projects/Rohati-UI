@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { Link, useRouter } from 'expo-router';
+import * as authService from '../../services/authService';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -8,10 +9,20 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleRegister = () => {
-    // In a real app, register with the backend
-    alert("Account created successfully!");
-    router.replace('/auth/login');
+  const handleRegister = async () => {
+    if (!username || !email || !password) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    try {
+      await authService.signUp({ email, password, name: username });
+      alert("Account created successfully!");
+      router.replace('/auth/login');
+    } catch (error) {
+      console.error("Registration failed:", error);
+      alert("Registration failed. Please try again.");
+    }
   };
 
   return (

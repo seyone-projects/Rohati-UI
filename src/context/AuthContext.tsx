@@ -58,8 +58,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
-    // 1. Remove the secure token (e.g., SecureStore.deleteItemAsync('userToken'))
-    // 2. Clear user state
+    try {
+      const { logout: clearSession } = await import('../services/authService');
+      await clearSession();
+    } catch (error) {
+      console.error("Failed to clear session on backend:", error);
+    }
+    // Clear user state
     setUser(null);
   };
 

@@ -18,17 +18,22 @@ export default function LoginScreen() {
 
     try {
       setIsLoading(true);
-      // The API client automatically encrypts this payload before sending it!
       const response = await authService.login({ email, password });
       
       console.log('Login Success:', response);
-      // login(response.token, response.user);
-      
-      // For now, if no backend is running:
-      login('fake-jwt-token', { id: '1', username: 'TestUser', email });
+      if (response && response.user) {
+        login('', { 
+          id: response.user.id, 
+          username: response.user.name || response.user.email.split('@')[0], 
+          email: response.user.email 
+        });
+      } else {
+        // Fallback for development if response doesn't return user
+        login('fake-jwt-token', { id: '1', username: 'TestUser', email });
+      }
     } catch (error) {
       console.error('Login failed:', error);
-      alert('Login failed. Please try again.');
+      alert('Login failed. Please check your credentials and try again.');
     } finally {
       setIsLoading(false);
     }

@@ -34,7 +34,8 @@ function isPublicRoute(url = '') {
 // Request interceptor
 apiClient.interceptors.request.use(
   async (config) => {
-    const token = await AsyncStorage.getItem('accessToken');
+    const betterAuthToken = await AsyncStorage.getItem('better-auth.session_token');
+    const token = betterAuthToken || await AsyncStorage.getItem('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
