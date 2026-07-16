@@ -1,100 +1,99 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
-import { useAuth } from '../../context/AuthContext';
-
+// replacing the homescreen with my custom themes
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { Spacing } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
+import { FlatList, StyleSheet, View } from "react-native";
+import { useAuth } from "../../context/AuthContext";
 // Dummy data for a simple social feed
 const POSTS = [
-  { id: '1', author: 'Alice', content: 'Just joined Rohati! Excited to connect with everyone.' },
-  { id: '2', author: 'Bob', content: 'What a beautiful day to build a React Native app!' },
-  { id: '3', author: 'Charlie', content: 'Can anyone recommend a good book?' },
+  {
+    id: "1",
+    author: "Alice",
+    content: "Just joined Rohati! Excited to connect with everyone.",
+  },
+  {
+    id: "2",
+    author: "Bob",
+    content: "What a beautiful day to build a React Native app!",
+  },
+  { id: "3", author: "Charlie", content: "Can anyone recommend a good book?" },
 ];
 
 export default function HomeFeedScreen() {
   const { user } = useAuth();
+  const theme = useTheme();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.welcomeText}>Welcome, {user?.username || 'User'}!</Text>
-      </View>
-      
+    <ThemedView style={styles.container}>
+      <ThemedView type="backgroundElement" style={styles.header}>
+        <ThemedText type="subtitle">
+          Welcome, {user?.username || "User"}!
+        </ThemedText>
+      </ThemedView>
+
       <FlatList
         data={POSTS}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.feed}
         renderItem={({ item }) => (
-          <View style={styles.postCard}>
+          <ThemedView
+            type="backgroundElement"
+            style={[styles.postCard, { borderColor: theme.cardBorder }]}
+          >
             <View style={styles.postHeader}>
-              <View style={styles.avatarPlaceholder}>
-                <Text style={styles.avatarText}>{item.author[0]}</Text>
+              <View
+                style={[
+                  styles.avatarPlaceholder,
+                  { backgroundColor: theme.primary },
+                ]}
+              >
+                <ThemedText type="smallBold" style={{ color: "#fff" }}>
+                  {item.author[0]}
+                </ThemedText>
               </View>
-              <Text style={styles.authorName}>{item.author}</Text>
+              <ThemedText type="smallBold">{item.author}</ThemedText>
             </View>
-            <Text style={styles.postContent}>{item.content}</Text>
-          </View>
+            <ThemedText style={styles.postContent}>{item.content}</ThemedText>
+          </ThemedView>
         )}
       />
-    </View>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f2f5',
   },
   header: {
-    padding: 20,
-    backgroundColor: '#fff',
+    padding: Spacing.four,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  welcomeText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
+    borderBottomColor: "rgba(0,0,0,0.05)",
   },
   feed: {
-    padding: 10,
+    padding: Spacing.three,
   },
   postCard: {
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    padding: Spacing.four,
+    borderRadius: 16,
+    marginBottom: Spacing.three,
+    borderWidth: 1,
   },
   postHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: Spacing.two,
   },
   avatarPlaceholder: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#208AEF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  avatarText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
-  authorName: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: '#333',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: Spacing.two,
   },
   postContent: {
-    fontSize: 16,
-    color: '#444',
-    lineHeight: 22,
+    marginTop: Spacing.one,
   },
 });

@@ -1,4 +1,4 @@
-import apiClient from './apiService';
+import apiClient from "./apiService";
 
 /**
  * Login user
@@ -6,8 +6,8 @@ import apiClient from './apiService';
  * @returns {Promise}
  */
 export const login = async (credentials) => {
-    const response = await apiClient.post('/auth/login', credentials);
-    return response.data;
+  const response = await apiClient.post("/auth/login", credentials);
+  return response.data;
 };
 
 /**
@@ -15,8 +15,18 @@ export const login = async (credentials) => {
  * @returns {Promise}
  */
 export const logout = async () => {
-    const response = await apiClient.post('/auth/logout');
-    return response.data;
+  const response = await apiClient.post("/auth/logout");
+  return response.data;
+};
+
+/**
+ * Register a new primary parent account
+ * @param {Object} userData - { email, password, familyName }
+ * @returns {Promise}
+ */
+export const register = async (userData) => {
+  const response = await apiClient.post("/auth/register", userData);
+  return response.data;
 };
 
 /**
@@ -24,8 +34,8 @@ export const logout = async () => {
  * @returns {Promise}
  */
 export const getCurrentUser = async () => {
-    const response = await apiClient.get('/auth/me');
-    return response.data;
+  const response = await apiClient.get("/auth/me");
+  return response.data;
 };
 
 /**
@@ -34,6 +44,6 @@ export const getCurrentUser = async () => {
  * @returns {Promise}
  */
 export const refreshToken = async (refreshToken) => {
-    const response = await apiClient.post('/auth/refresh', { refreshToken });
-    return response.data;
+  const response = await apiClient.post("/auth/refresh", { refreshToken });
+  return response.data;
 };
