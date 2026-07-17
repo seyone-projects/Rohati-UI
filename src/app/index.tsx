@@ -1,5 +1,5 @@
 // import { View } from 'react-native';
-import LandingPage from "@/screens/LandingPage";
+import LandingPage from "@/screens/NewLandingPage";
 
 export default function Index() {
   // This screen will be briefly mounted before the AuthGuard in _layout.tsx

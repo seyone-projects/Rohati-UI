@@ -3,9 +3,9 @@
 //  * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
 //  */
 
-// import '@/global.css';
+import "@/global.css";
 
-// import { Platform } from 'react-native';
+import { Platform } from "react-native";
 
 // export const Colors = {
 //   light: {
@@ -65,7 +65,6 @@
 // export const MaxContentWidth = 800;
 
 // I am gonna integrate the custom 6 themes i created for the website template
-import { Platform } from "react-native";
 
 // ----- THEME INTERFACE DEFINITIONS ------------------
 export interface RohatiTheme {
@@ -211,6 +210,26 @@ const LightThemes: Record<string, RohatiTheme> = {
     glowB: "rgba(217,119,6,0.4)",
     cardBorder: "rgba(30,41,59,0.15)",
   },
+  malar: {
+    id: "malar",
+    name: "Malar",
+    emoji: "🌱",
+    text: "#6D422B",
+    textSecondary: "#8D8D8D",
+    background: "#FFF9F2",
+    backgroundElement: "#EAF3E3",
+    backgroundSelected: "#F8C9CB",
+    primary: "#C65A2A",
+    primaryLight: "#F8C9CB",
+    secondary: "#A8BE95",
+    accent: "#5F7445",
+    gold: "#E8A62C",
+    gradientColors: ["#C65A2A", "#E8A62C"],
+    gradientSoftColors: ["rgba(198,90,42,0.1)", "rgba(232,166,44,0.1)"],
+    glowA: "rgba(198,90,42,0.3)",
+    glowB: "rgba(95,116,69,0.2)",
+    cardBorder: "rgba(109,66,43,0.12)",
+  },
 };
 
 //----- DARK MODE CIUSTOM THEMES-----------------------------------
@@ -263,6 +282,14 @@ const DarkThemes: Record<string, RohatiTheme> = {
     backgroundElement: "#0F172A",
     backgroundSelected: "#1E293B",
   },
+  malar: {
+    ...LightThemes.malar,
+    text: "#FFF9F2",
+    textSecondary: "#A8BE95",
+    background: "#1E120C",
+    backgroundElement: "#2A1B14",
+    backgroundSelected: "#3D251B",
+  },
 };
 
 export const MasterThemes = {
@@ -275,9 +302,13 @@ export type ThemeColor = keyof RohatiTheme;
 // ----------OTHER STYLING ------------------------------------------
 export const Fonts = Platform.select({
   ios: {
+    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: "system-ui",
+    /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: "ui-serif",
+    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: "ui-rounded",
+    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: "ui-monospace",
   },
   default: {

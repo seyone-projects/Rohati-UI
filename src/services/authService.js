@@ -6,7 +6,7 @@ import apiClient from "./apiService";
  * @returns {Promise}
  */
 export const login = async (credentials) => {
-  const response = await apiClient.post("/auth/login", credentials);
+  const response = await apiClient.post("/auth/loginnew", credentials);
   return response.data;
 };
 
@@ -25,7 +25,7 @@ export const logout = async () => {
  * @returns {Promise}
  */
 export const register = async (userData) => {
-  const response = await apiClient.post("/auth/register", userData);
+  const response = await apiClient.post("/auth/registernew", userData);
   return response.data;
 };
 
