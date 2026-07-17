@@ -10,19 +10,8 @@ export const login = async (credentials) => {
   return response.data;
 };
 
-/**
- * Sign up user using Better Auth Email and Password
- * @param {Object} data - { email, password, name }
- * @returns {Promise}
- */
 export const signUp = async (data) => {
-    const { email, password, name } = data;
-    const response = await authClient.signUp.email({
-        email,
-        password,
-        name,
-    });
-    return response.data;
+    return register(data);
 };
 
 /**

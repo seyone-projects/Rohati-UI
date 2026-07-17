@@ -47,7 +47,7 @@ apiClient.interceptors.request.use(
       const url = config.url || '';
 
       // 1) Public/pre-login: AES-only using static secret
-      if (url.includes('/auth/login')) {
+      if (url.includes('/auth/login') || url.includes('/auth/register')) {
         const { encryptedPayload } = encryptAES(config.data);
         config.data = { encryptedPayload };
       } else if (!isPublicRoute(url) && token) {

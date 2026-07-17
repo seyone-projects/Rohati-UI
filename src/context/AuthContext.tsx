@@ -1,10 +1,16 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Define the shape of our user object
 type User = {
   id: string;
-  username: string;
+  name: string;
   email: string;
+  familyName?: string;
+  countryCode?: string;
+  phoneNumber?: string;
+  role?: string;
+  avatarUrl?: string;
 } | null;
 
 // Define the shape of our authentication context
@@ -32,15 +38,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // When the app starts, check if we have a secure token stored
-    // In a real app with your backend, you would use expo-secure-store here to fetch the JWT
-    // and validate it with your server.
+    // When the app starts, check if we have a secure token and user profile stored
     const checkUserStatus = async () => {
       try {
-        // Simulated network request
-        await new Promise(resolve => setTimeout(resolve, 500));
-        // For now, we start unauthenticated
-        setUser(null);
+        const storedToken = await AsyncStorage.getItem('accessToken');
+        const storedUser = await AsyncStorage.getItem('user');
+        if (storedToken && storedUser) {
+          setUser(JSON.parse(storedUser));
+        } else {
+          setUser(null);
+        }
       } catch (error) {
         console.error("Failed to check auth status:", error);
       } finally {
@@ -52,8 +59,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = async (token: string, userData: User) => {
-    // 1. Securely store the token (e.g., SecureStore.setItemAsync('userToken', token))
-    // 2. Set the user in state to update the UI
+    try {
+      await AsyncStorage.setItem('accessToken', token);
+      await AsyncStorage.setItem('user', JSON.stringify(userData));
+    } catch (error) {
+      console.error("Failed to save user session:", error);
+    }
     setUser(userData);
   };
 
@@ -64,7 +75,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error("Failed to clear session on backend:", error);
     }
-    // Clear user state
+    try {
+      await AsyncStorage.multiRemove(['accessToken', 'user']);
+    } catch (error) {
+      console.error("Failed to remove user session:", error);
+    }
     setUser(null);
   };
 
