@@ -434,7 +434,7 @@ export default function LandingScreen() {
           <ThemedText style={styles.footerAccountPromptText}>
             Already have an account?{" "}
           </ThemedText>
-          <Pressable onPress={() => router.push("/auth/login" as any)}>
+          <Pressable onPress={() => router.push("/auth/loginnew" as any)}>
             <ThemedText style={styles.footerAccountRedirectActionText}>
               Login
             </ThemedText>

@@ -140,9 +140,10 @@ export default function RegisterScreen() {
 
       if (response.accessToken && response.user) {
         await handleRegisterion(response.accessToken, response.user);
-        router.replace("/onboarding" as any);
-      } else {
+        // router.replace("/onboarding" as any);
         router.replace("/auth/loginnew");
+      } else {
+        setError("Invalid response from authentication server");
       }
     } catch (err: any) {
       setError(
