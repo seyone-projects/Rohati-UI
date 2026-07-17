@@ -1,7 +1,7 @@
 import apiClient from "./apiService";
 
 /**
- * Login user
+ * Login user using Better Auth Email and Password
  * @param {Object} credentials - { email, password }
  * @returns {Promise}
  */
@@ -10,8 +10,12 @@ export const login = async (credentials) => {
   return response.data;
 };
 
+export const signUp = async (data) => {
+    return register(data);
+};
+
 /**
- * Logout user
+ * Logout user session
  * @returns {Promise}
  */
 export const logout = async () => {
@@ -30,7 +34,7 @@ export const register = async (userData) => {
 };
 
 /**
- * Get current user profile
+ * Get current user profile from session
  * @returns {Promise}
  */
 export const getCurrentUser = async () => {
@@ -40,7 +44,6 @@ export const getCurrentUser = async () => {
 
 /**
  * Refresh access token
- * @param {String} refreshToken
  * @returns {Promise}
  */
 export const refreshToken = async (refreshToken) => {

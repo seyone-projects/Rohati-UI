@@ -34,7 +34,8 @@ function isPublicRoute(url = '') {
 // Request interceptor
 apiClient.interceptors.request.use(
   async (config) => {
-    const token = await AsyncStorage.getItem('accessToken');
+    const betterAuthToken = await AsyncStorage.getItem('better-auth.session_token');
+    const token = betterAuthToken || await AsyncStorage.getItem('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -46,7 +47,7 @@ apiClient.interceptors.request.use(
       const url = config.url || '';
 
       // 1) Public/pre-login: AES-only using static secret
-      if (url.includes('/auth/login')) {
+      if (url.includes('/auth/login') || url.includes('/auth/register')) {
         const { encryptedPayload } = encryptAES(config.data);
         config.data = { encryptedPayload };
       } else if (!isPublicRoute(url) && token) {
