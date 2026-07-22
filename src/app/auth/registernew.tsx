@@ -142,13 +142,14 @@ export default function RegisterScreen() {
         await handleRegisterion(response.accessToken, response.user);
         // router.replace("/onboarding" as any);
         router.replace("/auth/loginnew");
-      } else {
-        setError("Invalid response from authentication server");
       }
+      // else {
+      //   // setError("Invalid response from authentication server");
+      // }
     } catch (err: any) {
-      setError(
-        err.response?.data?.message || "Registration failed. Verify inputs.",
-      );
+      // setError(
+      //   err.response?.data?.message || "Registration failed. Verify inputs.",
+      // );
     } finally {
       setLoading(false);
     }

@@ -30,7 +30,11 @@ function InitialLayout() {
       router.replace("/"); // redirecting to the landing page designed
     } else if (user && (inAuthGroup || atRootLanding)) {
       // Redirect to the main feed if authenticated and trying to access login
-      router.replace("/main");
+      if (segments[1] === "loginnew") {
+        router.replace("/main");
+      } else {
+        router.replace("/auth/loginnew");
+      }
     }
   }, [user, isLoading, segments]);
 

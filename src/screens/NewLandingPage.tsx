@@ -31,8 +31,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AdCreativeSparkImage from "../assets/images/CreativeSpark.png";
 import AdLearnifyImage from "../assets/images/LearnifyPartner.png";
 import Malar from "../assets/images/Malar.png";
+import MalarBackgroundCanvas from "../assets/images/Malar_BG_Landing.png";
 import MalarHeroImage from "../assets/images/Malar_Hero.png";
-import MalarBackgroundCanvas from "../assets/images/Malar_Landing_BG.png";
 import MalarLogoImage from "../assets/images/MalarLogo.png";
 import AdNutriLifeImage from "../assets/images/NutriLife.png";
 
