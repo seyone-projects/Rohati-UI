@@ -81,13 +81,15 @@ apiClient.interceptors.request.use(
 
 // Helper to clear storage and redirect
 const clearStorageAndRedirect = async () => {
-  await AsyncStorage.multiRemove([
-    "accessToken",
-    "refreshToken",
-    "user",
-    "publicKeyPem",
-    "privateKeyPem",
-  ]);
+  try {
+    await AsyncStorage.removeItem("accessToken");
+    await AsyncStorage.removeItem("refreshToken");
+    await AsyncStorage.removeItem("user");
+    await AsyncStorage.removeItem("publicKeyPem");
+    await AsyncStorage.removeItem("privateKeyPem");
+  } catch (err) {
+    console.error("Failed to clear storage:", err);
+  }
   router.replace("/auth/loginnew");
 };
 

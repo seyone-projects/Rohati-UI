@@ -1,5 +1,7 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "../../context/AuthContext";
 import OnboardingScreen, { OnboardingData } from "../../screens/OnboardingPage"; // Points straight to your file location
+import * as authService from "../../services/authService";
 
 export default function OnboardingRoute() {
   const { login, user } = useAuth();
@@ -11,16 +13,18 @@ export default function OnboardingRoute() {
         formData,
       );
       if (user) {
-        const updatedProfile = {
-          ...user,
+        // Send request to backend to mark user as onboarded
+        const response = await authService.completeOnboarding({
           name: formData.name,
-          isOnboarded: true,
-        };
+        });
 
-        await login("dummy_or_existing_token", updatedProfile);
+        if (response.success && response.user) {
+          const storedToken = await AsyncStorage.getItem("accessToken");
+          await login(storedToken || "dummy_token", response.user);
+        }
       }
     } catch (error) {
-      console.error("Failed saving onboarding metrics:", error);
+      console.log("Failed saving onboarding metrics:", error);
     }
   };
 
