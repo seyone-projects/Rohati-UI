@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(null);
         }
       } catch (error) {
-        console.error("Failed to check auth status:", error);
+        console.log("Failed to check auth status:", error);
       } finally {
         setIsLoading(false);
       }
@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await AsyncStorage.setItem("accessToken", token);
       await AsyncStorage.setItem("user", JSON.stringify(userData));
     } catch (error) {
-      console.error("Failed to save user session:", error);
+      console.log("Failed to save user session:", error);
     }
     setUser(userData);
   };
@@ -88,14 +88,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { logout: clearSession } = await import("../services/authService");
       await clearSession();
     } catch (error) {
-      console.error("Failed to clear session on backend:", error);
+      console.log("Failed to clear session on backend:", error);
     }
 
     try {
       await AsyncStorage.removeItem("accessToken");
       await AsyncStorage.removeItem("user");
     } catch (error) {
-      console.error("Failed to remove user session:", error);
+      console.log("Failed to remove user session:", error);
     }
     setUser(null);
   };
