@@ -50,3 +50,13 @@ export const refreshToken = async (refreshToken) => {
   const response = await apiClient.post("/auth/refresh", { refreshToken });
   return response.data;
 };
+
+/**
+ * Complete user onboarding
+ * @param {Object} onboardingData - { name }
+ * @returns {Promise}
+ */
+export const completeOnboarding = async (onboardingData) => {
+  const response = await apiClient.post("/auth/onboard", onboardingData);
+  return response.data;
+};

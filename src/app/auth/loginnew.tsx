@@ -107,7 +107,7 @@ export default function LoginScreen() {
         setError("Invalid response parameters from authentication server.");
       }
     } catch (err: any) {
-      console.error("Login processing error:", err);
+      console.log("Login processing error:", err);
       setError(
         err.response?.data?.error ||
           "Invalid email or password. Please try again.",
