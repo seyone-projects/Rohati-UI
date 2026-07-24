@@ -1,11 +1,12 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 // Define the shape of our user object
 type User = {
   id: string;
   name: string;
   email: string;
+  isOnboarded?: boolean;
   familyName?: string;
   countryCode?: string;
   phoneNumber?: string;
@@ -41,8 +42,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // When the app starts, check if we have a secure token and user profile stored
     const checkUserStatus = async () => {
       try {
-        const storedToken = await AsyncStorage.getItem('accessToken');
-        const storedUser = await AsyncStorage.getItem('user');
+        const storedToken = await AsyncStorage.getItem("accessToken");
+        const storedUser = await AsyncStorage.getItem("user");
         if (storedToken && storedUser) {
           setUser(JSON.parse(storedUser));
         } else {
@@ -60,23 +61,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (token: string, userData: User) => {
     try {
-      await AsyncStorage.setItem('accessToken', token);
-      await AsyncStorage.setItem('user', JSON.stringify(userData));
+      await AsyncStorage.setItem("accessToken", token);
+      await AsyncStorage.setItem("user", JSON.stringify(userData));
     } catch (error) {
       console.error("Failed to save user session:", error);
     }
     setUser(userData);
   };
 
+  // const logout = async () => {
+  //   try {
+  //     const { logout: clearSession } = await import("../services/authService");
+  //     await clearSession();
+  //   } catch (error) {
+  //     console.error("Failed to clear session on backend:", error);
+  //   }
+  //   try {
+  //     await AsyncStorage.multiRemove(["accessToken", "user"]);
+  //   } catch (error) {
+  //     console.error("Failed to remove user session:", error);
+  //   }
+  //   setUser(null);
+  // };
   const logout = async () => {
     try {
-      const { logout: clearSession } = await import('../services/authService');
+      const { logout: clearSession } = await import("../services/authService");
       await clearSession();
     } catch (error) {
       console.error("Failed to clear session on backend:", error);
     }
+
     try {
-      await AsyncStorage.multiRemove(['accessToken', 'user']);
+      await AsyncStorage.removeItem("accessToken");
+      await AsyncStorage.removeItem("user");
     } catch (error) {
       console.error("Failed to remove user session:", error);
     }

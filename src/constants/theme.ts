@@ -3,9 +3,9 @@
 //  * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
 //  */
 
-// import '@/global.css';
+import "@/global.css";
 
-// import { Platform } from 'react-native';
+import { Platform } from "react-native";
 
 // export const Colors = {
 //   light: {
@@ -65,7 +65,6 @@
 // export const MaxContentWidth = 800;
 
 // I am gonna integrate the custom 6 themes i created for the website template
-import { Platform } from "react-native";
 
 // ----- THEME INTERFACE DEFINITIONS ------------------
 export interface RohatiTheme {
@@ -155,22 +154,23 @@ const LightThemes: Record<string, RohatiTheme> = {
     id: "marigold",
     name: "Marigold",
     emoji: "🌻",
-    text: "#2B1A04",
-    textSecondary: "#78350F",
-    background: "#F4F7E6",
-    backgroundElement: "#FFFDF0",
-    backgroundSelected: "#FEF9C3",
-    primary: "#F59E0B",
-    primaryLight: "#FEF9C3",
-    secondary: "#4D7C0F",
-    accent: "#3B82F6",
-    gold: "#D97706",
-    gradientColors: ["#F59E0B", "#4D7C0F"],
-    gradientSoftColors: ["rgba(245,158,11,0.15)", "rgba(77,124,15,0.15)"],
-    glowA: "rgba(245,158,11,0.5)",
-    glowB: "rgba(77,124,15,0.4)",
-    cardBorder: "rgba(245,158,11,0.18)",
+    text: "#1E2A22",
+    textSecondary: "#4D3222",
+    background: "#FFF9F2",
+    backgroundElement: "#F7C948",
+    backgroundSelected: "#2E5A44",
+    primary: "#2E5A44",
+    primaryLight: "#FDE68A",
+    secondary: "#4D3222",
+    accent: "#2E5A44",
+    gold: "#F9C74F",
+    gradientColors: ["#F7C948", "#2E5A44"],
+    gradientSoftColors: ["rgba(247,201,72,0.12)", "rgba(46,90,68,0.12)"],
+    glowA: "rgba(46,90,68,0.4)",
+    glowB: "rgba(247,201,72,0.3)",
+    cardBorder: "rgba(77,50,34,0.12)",
   },
+
   lilac: {
     id: "lilac",
     name: "Lilac",
@@ -211,6 +211,26 @@ const LightThemes: Record<string, RohatiTheme> = {
     glowB: "rgba(217,119,6,0.4)",
     cardBorder: "rgba(30,41,59,0.15)",
   },
+  malar: {
+    id: "malar",
+    name: "Malar",
+    emoji: "🌱",
+    text: "#6D422B",
+    textSecondary: "#8D8D8D",
+    background: "#FFF9F2",
+    backgroundElement: "#EAF3E3",
+    backgroundSelected: "#F8C9CB",
+    primary: "#C65A2A",
+    primaryLight: "#F8C9CB",
+    secondary: "#A8BE95",
+    accent: "#5F7445",
+    gold: "#E8A62C",
+    gradientColors: ["#C65A2A", "#E8A62C"],
+    gradientSoftColors: ["rgba(198,90,42,0.1)", "rgba(232,166,44,0.1)"],
+    glowA: "rgba(198,90,42,0.3)",
+    glowB: "rgba(95,116,69,0.2)",
+    cardBorder: "rgba(109,66,43,0.12)",
+  },
 };
 
 //----- DARK MODE CIUSTOM THEMES-----------------------------------
@@ -241,11 +261,11 @@ const DarkThemes: Record<string, RohatiTheme> = {
   },
   marigold: {
     ...LightThemes.marigold,
-    text: "#FFFFFF",
-    textSecondary: "#FEF9C3",
-    background: "#1A1000",
-    backgroundElement: "#451A03",
-    backgroundSelected: "#1E3A1E",
+    text: "#FCF9F2",
+    textSecondary: "#FDE68A",
+    background: "#121A15",
+    backgroundElement: "#1B2A21",
+    backgroundSelected: "#F7C948",
   },
   lilac: {
     ...LightThemes.lilac,
@@ -263,6 +283,14 @@ const DarkThemes: Record<string, RohatiTheme> = {
     backgroundElement: "#0F172A",
     backgroundSelected: "#1E293B",
   },
+  malar: {
+    ...LightThemes.malar,
+    text: "#FFF9F2",
+    textSecondary: "#A8BE95",
+    background: "#1E120C",
+    backgroundElement: "#2A1B14",
+    backgroundSelected: "#3D251B",
+  },
 };
 
 export const MasterThemes = {
@@ -275,9 +303,13 @@ export type ThemeColor = keyof RohatiTheme;
 // ----------OTHER STYLING ------------------------------------------
 export const Fonts = Platform.select({
   ios: {
+    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: "system-ui",
+    /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: "ui-serif",
+    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: "ui-rounded",
+    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: "ui-monospace",
   },
   default: {
