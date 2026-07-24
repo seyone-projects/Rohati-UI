@@ -278,49 +278,51 @@ export default function RegisterScreen() {
               {/* Phone Number and Country code */}
               {/* <View style={[styles.phoneCodeRow, { zIndex: 5000 }]}> */}
               <View style={styles.phoneCodeRow}>
-                {/* Anchor Dropdown Button Channel */}
-                <Pressable
-                  style={[
-                    styles.countryAnchor,
-                    {
-                      borderColor: theme.cardBorder,
-                      backgroundColor: "rgba(255, 255, 255, 0.7)",
-                    },
-                  ]}
-                  onPress={() => setShowCodeDropdown(!showCodeDropdown)}
-                >
-                  <ThemedText type="smallBold" style={{ color: theme.text }}>
-                    {selectedCountry.code}
-                  </ThemedText>
-                  <ChevronDown size={14} color={theme.textSecondary} />
-                </Pressable>
+                <View style={styles.phoneFlexRow}>
+                  {/* Anchor Dropdown Button Channel */}
+                  <Pressable
+                    style={[
+                      styles.countryAnchor,
+                      {
+                        borderColor: theme.cardBorder,
+                        backgroundColor: "rgba(255, 255, 255, 0.7)",
+                      },
+                    ]}
+                    onPress={() => setShowCodeDropdown(!showCodeDropdown)}
+                  >
+                    <ThemedText type="smallBold" style={{ color: theme.text }}>
+                      {selectedCountry.code}
+                    </ThemedText>
+                    <ChevronDown size={14} color={theme.textSecondary} />
+                  </Pressable>
 
-                {/* Main Phone Input Body Frame */}
-                <View
-                  style={[
-                    getInputContainerStyle("phone"),
-                    { flex: 1, marginTop: 0 },
-                  ]}
-                >
-                  <Phone
-                    size={18}
-                    color={theme.textSecondary}
-                    style={styles.inputLeftIcon}
-                  />
-                  <TextInput
-                    style={[styles.textInputBody, { color: theme.text }]}
-                    placeholder="Phone Number"
-                    placeholderTextColor={theme.textSecondary}
-                    value={phoneNumber}
-                    onChangeText={setPhoneNumber}
-                    keyboardType="phone-pad"
-                    textContentType="telephoneNumber"
-                    onFocus={() => {
-                      setFocusedField("phone");
-                      setShowCodeDropdown(false);
-                    }}
-                    onBlur={() => setFocusedField(null)}
-                  />
+                  {/* Main Phone Input Body Frame */}
+                  <View
+                    style={[
+                      getInputContainerStyle("phone"),
+                      { flex: 1, marginTop: 0 },
+                    ]}
+                  >
+                    <Phone
+                      size={18}
+                      color={theme.textSecondary}
+                      style={styles.inputLeftIcon}
+                    />
+                    <TextInput
+                      style={[styles.textInputBody, { color: theme.text }]}
+                      placeholder="Phone Number"
+                      placeholderTextColor={theme.textSecondary}
+                      value={phoneNumber}
+                      onChangeText={setPhoneNumber}
+                      keyboardType="phone-pad"
+                      textContentType="telephoneNumber"
+                      onFocus={() => {
+                        setFocusedField("phone");
+                        setShowCodeDropdown(false);
+                      }}
+                      onBlur={() => setFocusedField(null)}
+                    />
+                  </View>
                 </View>
 
                 {/* 🔒 INLINE FLOATING DROPDOWN MENU SELECTION TRAY */}
@@ -706,6 +708,12 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "relative",
   },
+  phoneFlexRow: {
+    flexDirection: "row",
+    gap: Spacing.two,
+    width: "100%",
+    height: 48,
+  },
   countryAnchor: {
     width: 78,
     height: 38,
@@ -731,6 +739,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 6,
+    paddingVertical: 12,
+    paddingHorizontal: Spacing.three,
+    // borderRadius: 8,
+    marginVertical: 1,
   },
   inlineDropdownListItemRow: {
     paddingVertical: 12,

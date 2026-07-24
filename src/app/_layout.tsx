@@ -15,25 +15,45 @@ function InitialLayout() {
   useEffect(() => {
     if (isLoading) return;
 
+    const currentSegments = segments as string[];
+    const rootSegment = currentSegments[0] || "";
     // Check if the current route is in the auth folder
-    const inAuthGroup = segments[0] === "auth";
+    const inAuthGroup = rootSegment === "auth";
 
     // check if the current route is in the main folder
-    const inMainGroup = segments[0] === "main";
+    const inMainGroup = rootSegment === "main";
+    const inOnboardingGroup = rootSegment === "onboarding";
 
     // check if the user is in landing screen
-    const atRootLanding = !inAuthGroup && !inMainGroup;
+    // const atRootLanding = !inAuthGroup && !inMainGroup;
+    const atRootLanding = currentSegments.length === 0 || rootSegment === "";
 
-    if (!user && !inAuthGroup && !atRootLanding) {
-      // Redirect to the login page if not authenticated
-      // router.replace("/auth/login");
-      router.replace("/"); // redirecting to the landing page designed
-    } else if (user && (inAuthGroup || atRootLanding)) {
-      // Redirect to the main feed if authenticated and trying to access login
-      if (segments[1] === "loginnew") {
+    // if (!user && !inAuthGroup && !atRootLanding) {
+    //   // Redirect to the login page if not authenticated
+    //   // router.replace("/auth/login");
+    //   router.replace("/"); // redirecting to the landing page designed
+    // } else if (user && (inAuthGroup || atRootLanding)) {
+    //   // Redirect to the main feed if authenticated and trying to access login
+    //   if (segments[1] === "loginnew") {
+    //     router.replace("/main");
+    //   } else {
+    //     router.replace("/auth/loginnew");
+    //   }
+    // }
+    if (!user) {
+      if (!inAuthGroup && !atRootLanding) {
+        router.replace("/" as any);
+      }
+      return;
+    }
+    const hasCompletedOnboarding = user?.isOnboarded ?? false;
+    if (!hasCompletedOnboarding) {
+      if (!inOnboardingGroup) {
+        router.replace("/onboarding" as any);
+      }
+    } else {
+      if (inAuthGroup || atRootLanding || inOnboardingGroup) {
         router.replace("/main");
-      } else {
-        router.replace("/auth/loginnew");
       }
     }
   }, [user, isLoading, segments]);

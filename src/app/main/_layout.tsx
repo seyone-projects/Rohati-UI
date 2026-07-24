@@ -21,7 +21,7 @@ export default function MainLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: "Rohati Feed",
+          title: "Malar",
           headerRight: () => (
             <TouchableOpacity onPress={logout} style={{ marginRight: 15 }}>
               {/* <Text style={{ color: "#208AEF", fontWeight: "bold" }}>
